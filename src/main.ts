@@ -19,7 +19,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // bỏ các thuộc tính ko có trong DTO
-      transform: true, // sử dụng transform validator
+      transform: true, // sử dụng transform validator,
     }),
   );
 

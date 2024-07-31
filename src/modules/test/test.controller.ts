@@ -8,7 +8,6 @@ export class TestController {
 
   @Get()
   getHello(@Query() params: TestDTO) {
-    console.log("Debug_here params: ", params);
     return params;
   }
 }

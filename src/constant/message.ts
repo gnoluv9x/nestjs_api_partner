@@ -5,9 +5,11 @@ export const MESSAGES = {
   },
   EXCEPTIONS: {
     UNAUTH: "Bạn không có quyền truy cập",
+    HAS_ERROR: "Có lỗi xảy ra",
   },
   VALIDATIONS: {
     IS_NOT_EMPTY: "$property không được bỏ trống",
     IS_NUMBER_STRING: "$property không phải dạng số",
+    WRONG_FORMAT: "Sai định dạng $property",
   },
 };

@@ -1,4 +1,4 @@
-import { Exclude } from "class-transformer";
+import { Exclude, Expose } from "class-transformer";
 import {
   IsEmail,
   IsNotEmpty,
@@ -19,7 +19,8 @@ export class TestDTO {
   password: string;
 
   @IsEmail()
-  email: string;
+  @Expose({ name: "email" })
+  new_email: string;
 
   @IsOptional()
   @IsString()

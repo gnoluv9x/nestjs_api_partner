@@ -5,10 +5,11 @@ import {
   Injectable,
   NestInterceptor,
 } from "@nestjs/common";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import queryString from "query-string";
 import { Observable } from "rxjs";
 import { PARTNER_SOURCE_VALUE } from "src/constant";
+import { MESSAGES } from "src/constant/message";
 
 @Injectable()
 export class HttpInterceptor implements NestInterceptor {
@@ -49,6 +50,15 @@ export class HttpInterceptor implements NestInterceptor {
     this.httpService.axiosRef.interceptors.response.use(
       (response: AxiosResponse) => {
         return response.data;
+      },
+      (err) => {
+        if (err instanceof AxiosError) {
+          return Promise.reject(
+            err.response.data || MESSAGES.EXCEPTIONS.HAS_ERROR,
+          );
+        }
+
+        return Promise.reject(err);
       },
     );
   }
