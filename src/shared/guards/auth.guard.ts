@@ -20,11 +20,17 @@ export class AuthGuard implements CanActivate {
     const apiKey = request.headers?.[HEADER_API_KEY_NAME] || "";
     const agentId = request.headers?.[HEADER_AGENT_NAME] || "";
 
+    if (!apiKey || !agentId) {
+      throw new CustomUnauthorizedException();
+    }
+
     const agentData = await this.agentService.findOne(+agentId);
 
     if (!agentData || agentData.apiKey !== apiKey) {
       throw new CustomUnauthorizedException();
     }
+
+    request.headers["token"] = agentData.token;
 
     return true;
   }

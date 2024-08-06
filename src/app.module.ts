@@ -1,3 +1,4 @@
+import { HttpModule } from "@nestjs/axios";
 import {
   MiddlewareConsumer,
   Module,
@@ -5,7 +6,7 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { APP_FILTER, APP_GUARD } from "@nestjs/core";
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -17,6 +18,7 @@ import { ProductsModule } from "./modules/products/products.module";
 import { TestModule } from "./modules/test/test.module";
 import { NotFoundExceptionFilter } from "./shared/exceptions/not-found.exception";
 import { AuthGuard } from "./shared/guards/auth.guard";
+import { HttpInterceptor } from "./shared/interceptor/http.interceptor";
 import { LoggerMiddleware } from "./shared/middlewares/logger.middleware";
 
 @Module({
@@ -28,6 +30,7 @@ import { LoggerMiddleware } from "./shared/middlewares/logger.middleware";
     AgentModule,
     OrderModule,
     ProductsModule,
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [
@@ -39,6 +42,10 @@ import { LoggerMiddleware } from "./shared/middlewares/logger.middleware";
     {
       provide: APP_FILTER,
       useClass: NotFoundExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpInterceptor,
     },
   ],
 })

@@ -5,6 +5,7 @@ import { QueryAllProductDTO, QueryProductFilterDTO } from "./dto/product.dto";
 import { CustomLoggerService } from "../logger/logger.service";
 import { LOGGER_INJECT_TOKEN } from "src/constant";
 import { MESSAGES } from "src/constant/message";
+import { AxiosResponse } from "axios";
 
 @Injectable()
 export class ProductsService {
@@ -15,11 +16,11 @@ export class ProductsService {
 
   async getAll(params: QueryAllProductDTO): Promise<any> {
     try {
-      const responseData = await lastValueFrom(
-        this.httpService.get("/api/products", { params }),
+      const responseData = await lastValueFrom<AxiosResponse["data"]>(
+        this.httpService.get("/api/products", {
+          params,
+        }),
       );
-
-      console.log("Debug_here responseData: ", responseData);
 
       return responseData;
     } catch (error) {
@@ -29,14 +30,14 @@ export class ProductsService {
       });
 
       throw new BadRequestException(
-        error?.message || MESSAGES.EXCEPTIONS.HAS_ERROR,
+        error?.message || MESSAGES.EXCEPTIONS.NOT_FOUND_DATA,
       );
     }
   }
 
   async getFilters(params: QueryProductFilterDTO): Promise<any> {
     try {
-      const responseData = await lastValueFrom(
+      const responseData = await lastValueFrom<AxiosResponse["data"]>(
         this.httpService.get("/api/filters", { params }),
       );
 
@@ -48,15 +49,19 @@ export class ProductsService {
       });
 
       throw new BadRequestException(
-        error?.message || MESSAGES.EXCEPTIONS.HAS_ERROR,
+        error?.message || MESSAGES.EXCEPTIONS.NOT_FOUND_DATA,
       );
     }
   }
-  async findOne(id: number): Promise<any> {
+  async findOne(slug: string): Promise<any> {
     try {
-      const responseData = await lastValueFrom(
-        this.httpService.get(`/api/product/${id}`),
+      const responseData = await lastValueFrom<AxiosResponse["data"]>(
+        this.httpService.get(`/api/product/${slug}`),
       );
+
+      if (responseData?.["suggest"]) {
+        delete responseData["suggest"];
+      }
 
       return responseData;
     } catch (error) {
@@ -66,7 +71,7 @@ export class ProductsService {
       });
 
       throw new BadRequestException(
-        error?.message || MESSAGES.EXCEPTIONS.HAS_ERROR,
+        error?.message || MESSAGES.EXCEPTIONS.NOT_FOUND_DATA,
       );
     }
   }

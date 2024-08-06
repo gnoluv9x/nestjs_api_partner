@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from "@nestjs/common";
+import { Controller, Get, Param, Query } from "@nestjs/common";
 import { QueryAllProductDTO, QueryProductFilterDTO } from "./dto/product.dto";
 import { ProductsService } from "./products.service";
 
@@ -14,9 +14,9 @@ export class ProductsController {
     return response;
   }
 
-  @Get("/:id")
-  async getPackageDetails(@Param("id", ParseIntPipe) id: number) {
-    const response = await this.productsService.findOne(id);
+  @Get("/:slug")
+  async getPackageDetails(@Param("slug") slug: string) {
+    const response = await this.productsService.findOne(slug);
     return response;
   }
 

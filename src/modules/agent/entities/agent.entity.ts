@@ -6,6 +6,9 @@ export class AgentEntity {
   @PrimaryGeneratedColumn({ name: "oo_id" })
   id: number;
 
-  @Column({ type: "varchar", length: 190, nullable: true, name: "phone" })
+  @Column({ type: "varchar", length: 190, nullable: true, name: "tokenApi" })
   apiKey: string;
+
+  @Column({ type: "varchar", length: 190, nullable: true })
+  token: string;
 }
